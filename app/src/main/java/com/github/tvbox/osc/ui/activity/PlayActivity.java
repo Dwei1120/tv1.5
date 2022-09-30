@@ -1361,7 +1361,7 @@ public class PlayActivity extends BaseActivity {
 //                return new WebResourceResponse("image/png", null, null);
 //            }
             if (url.endsWith("/favicon.ico")) {
-                return null;
+                return new WebResourceResponse("image/png", null, null);
             }
             LOG.i("shouldInterceptRequest url:" + url);
             boolean ad;
@@ -1398,9 +1398,9 @@ public class PlayActivity extends BaseActivity {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             WebResourceResponse response = checkIsVideo(url, null);
-//            if (response == null)
-//                return super.shouldInterceptRequest(view, url);
-//            else
+            if (response == null)
+                return super.shouldInterceptRequest(view, url);
+            else
                 return response;
         }
 
@@ -1428,9 +1428,9 @@ public class PlayActivity extends BaseActivity {
 
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-//            if (response == null)
-//                return super.shouldInterceptRequest(view, request);
-//            else
+            if (response == null)
+                return super.shouldInterceptRequest(view, request);
+            else
                 return response;
         }
 
@@ -1541,7 +1541,7 @@ public class PlayActivity extends BaseActivity {
 //                return createXWalkWebResourceResponse("image/png", null, null);
 //            }
             if (url.endsWith("/favicon.ico")) {
-                return null;
+                return createXWalkWebResourceResponse("image/png", null, null);
             }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
