@@ -3,6 +3,7 @@ package com.github.tvbox.osc.util;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.github.tvbox.osc.api.ApiConfig;
@@ -114,19 +115,27 @@ public class DefaultConfig {
     
     public static boolean isVideoFormat(String url) {
         //if (url.contains("=http") || url.contains(".html")) {
-        if (url.contains("=http") || url.contains("=https") || url.contains("?http") || url.contains(".html") || url.contains("=https%3a%2f") || url.contains("=http%3a%2f")) {
+        //if (url.contains("=http") || url.contains("=https") || url.contains("?http") || url.contains(".html") || url.contains("=https%3a%2f") || url.contains("=http%3a%2f")) {
+        if (url.contains("=http")) {
             return false;
         }
+        Uri uri = Uri.parse(url);
+        if (uri.getPath().endsWith(".js") || uri.getPath().endsWith(".css") || uri.getPath().endsWith(".html")) {
+            return false;
+        }
+        if (uri.getQuery().startsWith("http")) {
+        return false;
+        }
         if (normalSnifferMatch.matcher(url).find()) {
-            if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
-                return false;
-            }
+            //if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
+            //    return false;
+            //}
             return true;
         }
         if (snifferMatch.matcher(url).find()) {
-            if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
-                return false;
-            }
+            //if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
+            //    return false;
+            //}
             return true;
         }
         return false;
