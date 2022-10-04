@@ -585,6 +585,8 @@ public class PlayFragment extends BaseLazyFragment {
                         String playUrl = info.optString("playUrl", "");
                         String flag = info.optString("flag");
                         String url = info.getString("url");
+                        //web给个默认的UA
+                        webUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.54 Safari/537.36";
                         HashMap<String, String> headers = null;
                         
                         webHeaderMap = null;
@@ -598,7 +600,9 @@ public class PlayFragment extends BaseLazyFragment {
                                         headers = new HashMap<>();
                                     }
                                     headers.put(key, hds.getString(key));
-                                    
+                                    if (key.equalsIgnoreCase("user-agent")) {
+                                        webUserAgent = hds.getString(key).trim();
+                                    }
                                 }
                                 webHeaderMap = headers;
                             } catch (Throwable th) {
@@ -838,7 +842,7 @@ public class PlayFragment extends BaseLazyFragment {
     private String progressKey;
     private String parseFlag;
     private String webUrl;
-    
+    private String webUserAgent;
     private Map<String, String > webHeaderMap;
 
     private void initParse(String flag, boolean useParse, String playUrl, final String url) {
@@ -1191,9 +1195,9 @@ public class PlayFragment extends BaseLazyFragment {
                 // webUserAgent = "Mozilla/5.0 (Linux; Android 6.0.1; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Mobile Safari/537.36";
                 if (mXwalkWebView != null) {
                     mXwalkWebView.stopLoading();
-                    //if(webUserAgent != null) {
-                        //mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
-                    //}
+                    if(webUserAgent != null) {
+                        mXwalkWebView.getSettings().setUserAgentString(webUserAgent);
+                    }
                     //mXwalkWebView.clearCache(true);
                     if(webHeaderMap != null){
                         mXwalkWebView.loadUrl(url,webHeaderMap);
@@ -1203,9 +1207,9 @@ public class PlayFragment extends BaseLazyFragment {
                 }
                 if (mSysWebView != null) {
                     mSysWebView.stopLoading();
-                    //if(webUserAgent != null) {
-                        //mSysWebView.getSettings().setUserAgentString(webUserAgent);
-                    //}
+                    if(webUserAgent != null) {
+                        mSysWebView.getSettings().setUserAgentString(webUserAgent);
+                    }
                     //mSysWebView.clearCache(true);
                     if(webHeaderMap != null){
                         mSysWebView.loadUrl(url,webHeaderMap);
