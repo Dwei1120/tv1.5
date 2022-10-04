@@ -586,10 +586,8 @@ public class PlayFragment extends BaseLazyFragment {
                         String playUrl = info.optString("playUrl", "");
                         String flag = info.optString("flag");
                         String url = info.getString("url");
-                        //web给个默认的UA
-                        webUserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.54 Safari/537.36";
                         HashMap<String, String> headers = null;
-                        
+                        webUserAgent = null;
                         webHeaderMap = null;
                         if (info.has("header")) {
                             try {
