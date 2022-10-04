@@ -1393,7 +1393,10 @@ public class PlayFragment extends BaseLazyFragment {
 //            }
             LOG.i("shouldInterceptRequest url:" + url);
             if (url.endsWith("/favicon.ico")) {
-                return new WebResourceResponse("image/png", null, null);
+                if (url.startsWith("http://127.0.0.1")) {
+                    return new WebResourceResponse("image/x-icon", "UTF-8", null);
+                }
+                return null;
             }
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
@@ -1405,6 +1408,7 @@ public class PlayFragment extends BaseLazyFragment {
 
             if (!ad) {
                 if (checkVideoFormat(url)) {
+                    LOG.i("checkVideoFormat:" + url );
                     if (loadFoundCount.incrementAndGet() == 1) {
                         mHandler.removeMessages(100);
                         if (headers != null && !headers.isEmpty()) {
@@ -1429,10 +1433,7 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
             WebResourceResponse response = checkIsVideo(url, null);
-            if (response == null)
-                return super.shouldInterceptRequest(view, url);
-            else
-                return response;
+            return response;
         }
 
         @Nullable
@@ -1459,10 +1460,7 @@ public class PlayFragment extends BaseLazyFragment {
 
             }
             WebResourceResponse response = checkIsVideo(url, webHeaders);
-            if (response == null)
-                return super.shouldInterceptRequest(view, request);
-            else
-                return response;
+            return response;
         }
 
         @Override
@@ -1572,7 +1570,10 @@ public class PlayFragment extends BaseLazyFragment {
 //                return createXWalkWebResourceResponse("image/png", null, null);
 //            }
             if (url.endsWith("/favicon.ico")) {
-                return super.shouldInterceptLoadRequest(view, request);
+                if (url.startsWith("http://127.0.0.1")) {
+                    return createXWalkWebResourceResponse("image/x-icon", "UTF-8", null);
+                }
+                return null;
             }
             LOG.i("shouldInterceptLoadRequest url:" + url);
             boolean ad;
@@ -1584,6 +1585,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
             if (!ad ) {
                 if (checkVideoFormat(url)) {
+                    LOG.i("checkVideoFormat:" + url );
                     if (loadFoundCount.incrementAndGet() == 1) {
                         mHandler.removeMessages(100);
                         HashMap<String, String> webHeaders = new HashMap<>();
@@ -1611,7 +1613,7 @@ public class PlayFragment extends BaseLazyFragment {
             }
             return ad || loadFoundCount.get() > 0 ?
                     createXWalkWebResourceResponse("text/plain", "utf-8", new ByteArrayInputStream("".getBytes())) :
-                    super.shouldInterceptLoadRequest(view, request);
+                    null;
         }
 
         @Override
