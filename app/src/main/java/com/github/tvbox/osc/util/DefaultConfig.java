@@ -130,12 +130,12 @@ public class DefaultConfig {
         if (path.endsWith(".js") || path.endsWith(".css") || path.endsWith(".html")) {
         return false;
         }
-        if (normalSnifferMatch.matcher(url).find()) {
+        //if (normalSnifferMatch.matcher(url).find()) {
             //if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
             //    return false;
             //}
-            return true;
-        }
+            //return true;
+        //}
         String query = uri.getQuery();
         if (query != null && query.startsWith("http")) {
             return false;
