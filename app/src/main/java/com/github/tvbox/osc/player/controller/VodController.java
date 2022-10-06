@@ -113,8 +113,8 @@ public class VodController extends BaseController {
     TextView mNextBtn;
     TextView mPreBtn;
     TextView mPlayerScaleBtn;
-    TextView mPlayerSpeedBtn;
     public TextView mPlayerSpeedBtn;
+    TextView mPlayerBtn;
     TextView mPlayerIJKBtn;
     TextView mPlayerRetry;
     TextView mPlayrefresh;
