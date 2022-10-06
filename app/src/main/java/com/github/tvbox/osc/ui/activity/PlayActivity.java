@@ -1462,7 +1462,7 @@ public class PlayActivity extends BaseActivity {
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
             String url = request.getUrl().toString();
             LOG.i("shouldInterceptRequest url:" + url);
-            //css与jpg等无效资源避免请求远程直接返回response
+/*            css与jpg等无效资源避免请求远程直接返回response
             String uselessmMimeType = null;
             if (url.contains(".css")) {
                 uselessmMimeType = "text/css";
@@ -1476,18 +1476,21 @@ public class PlayActivity extends BaseActivity {
             if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
                 return new WebResourceResponse(uselessmMimeType, "UTF-8", null);
             }
+*/
             HashMap<String, String> webHeaders = new HashMap<>();
-            try {
-                Map<String, String> hds = request.getRequestHeaders();
+            Map<String, String> hds = request.getRequestHeaders();
+            if (hds != null && hds.keySet().size() > 0) {
+           //try {
+                //Map<String, String> hds = request.getRequestHeaders();
                 for (String k : hds.keySet()) {
                     if (k.equalsIgnoreCase("user-agent")
                             || k.equalsIgnoreCase("referer")
-                            || k.equalsIgnoreCase("accept")
+//                          || k.equalsIgnoreCase("accept")
                             || k.equalsIgnoreCase("origin")) {
                         webHeaders.put(k, hds.get(k));
                     }
                 }
-            } catch (Throwable th) {
+//            } catch (Throwable th) {
                 
 
             }
@@ -1605,7 +1608,7 @@ public class PlayActivity extends BaseActivity {
                 }
                 return null;
             }
-            //css与jpg等无效资源避免请求远程直接返回response
+/*            css与jpg等无效资源避免请求远程直接返回response
             String uselessmMimeType = null;
             if (url.contains(".css")) {
                 uselessmMimeType = "text/css";
@@ -1619,7 +1622,7 @@ public class PlayActivity extends BaseActivity {
             if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
                 return createXWalkWebResourceResponse(uselessmMimeType, "UTF-8", null);
             }
-            
+*/            
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
                 ad = AdBlocker.isAd(url);
@@ -1630,17 +1633,19 @@ public class PlayActivity extends BaseActivity {
             if (!ad ) {
                 if (checkVideoFormat(url)) {
                     HashMap<String, String> webHeaders = new HashMap<>();
-                    try {
-                        Map<String, String> hds = request.getRequestHeaders();
+                    Map<String, String> hds = request.getRequestHeaders();
+                    if (hds != null && hds.keySet().size() > 0) {
+                    //try {
+                        //Map<String, String> hds = request.getRequestHeaders();
                         for (String k : hds.keySet()) {
                             if (k.equalsIgnoreCase("user-agent")
                                     || k.equalsIgnoreCase("referer")
-                                    || k.equalsIgnoreCase("accept")
+//                                    || k.equalsIgnoreCase("accept")
                                     || k.equalsIgnoreCase("origin")) {
                                 webHeaders.put(k, hds.get(k));
                             }
                         }
-                    } catch (Throwable th) {
+//                    } catch (Throwable th) {
 
                     }
                     loadFoundVideoUrls.add(url);
