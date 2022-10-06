@@ -140,7 +140,7 @@ public class DefaultConfig {
         if (query != null && query.startsWith("http")) {
             return false;
         }
-        for(String oneSubfix : videoSubfix) {
+        for(String oneSubfix : videoSuffix) {
             if (path.endsWith("." + oneSubfix)) {
                 return true;
             }
