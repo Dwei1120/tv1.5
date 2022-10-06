@@ -110,6 +110,8 @@ public class PlayFragment extends BaseLazyFragment {
     private VodController mController;
     private SourceViewModel sourceViewModel;
     private Handler mHandler;
+    
+    private long videoDuration = -1;
 
     @Override
     protected int getLayoutResID() {
@@ -147,6 +149,11 @@ public class PlayFragment extends BaseLazyFragment {
         ProgressManager progressManager = new ProgressManager() {
             @Override
             public void saveProgress(String url, long progress) {
+                if (videoDuration != -1) {
+                    if (videoDuration <= 6000) {
+                        return;
+                    }
+                }
                 CacheManager.save(MD5.string2MD5(url), progress);
             }
 
@@ -223,9 +230,22 @@ public class PlayFragment extends BaseLazyFragment {
             @Override
             public void prepared() {
                 initSubtitleView();
+                initVideoDurationSomeThing();
             }
         });
         mVideoView.setVideoController(mController);
+    }
+    
+    void initVideoDurationSomeThing() {
+        videoDuration = mVideoView.getMediaPlayer().getDuration();
+        if (videoDuration <= 6000) {
+            mController.mPlayerSpeedBtn.setVisibility(View.GONE);
+            mController.mPlayerTimeStartEndText.setVisibility(View.GONE);
+            mController.mPlayerTimeStartBtn.setVisibility(View.GONE);
+            mController.mPlayerTimeSkipBtn.setVisibility(View.GONE);
+            mController.mPlayerTimeStepBtn.setVisibility(View.GONE);
+            mController.mPlayerTimeResetBtn.setVisibility(View.GONE);
+        }
     }
 
     //设置字幕
@@ -1413,7 +1433,7 @@ public class PlayFragment extends BaseLazyFragment {
 //            if (url.endsWith("/favicon.ico")) {
 //                return new WebResourceResponse("image/png", null, null);
 //            }
-            LOG.i("shouldInterceptRequest url:" + url);
+//            LOG.i("shouldInterceptRequest url:" + url);
             if (url.endsWith("/favicon.ico")) {
                 if (url.startsWith("http://127.0.0.1")) {
                     return new WebResourceResponse("image/x-icon", "UTF-8", null);
@@ -1465,11 +1485,19 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         @TargetApi(Build.VERSION_CODES.LOLLIPOP)
         public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-            String url = "";
-            try {
-                url = request.getUrl().toString();
-            } catch (Throwable th) {
-
+            String url = request.getUrl().toString();
+            LOG.i("shouldInterceptRequest url:" + url);
+            //css与jpg等无效资源避免请求远程直接返回response
+            String uselessmMimeType = null;
+            if (url.contains(".css")) {
+                uselessmMimeType = "text/css";
+            } else if (url.contains(".jpg")) {
+                uselessmMimeType = "image/jpeg";
+            } else if (url.contains(".png")) {
+                uselessmMimeType = "image/png";
+            }
+            if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
+                return new WebResourceResponse(uselessmMimeType, "UTF-8", null);
             }
             HashMap<String, String> webHeaders = new HashMap<>();
             try {
@@ -1477,6 +1505,7 @@ public class PlayFragment extends BaseLazyFragment {
                 for (String k : hds.keySet()) {
                     if (k.equalsIgnoreCase("user-agent")
                             || k.equalsIgnoreCase("referer")
+                            || k.equalsIgnoreCase("accept")
                             || k.equalsIgnoreCase("origin")) {
                         webHeaders.put(k, hds.get(k));
                     }
@@ -1590,6 +1619,7 @@ public class PlayFragment extends BaseLazyFragment {
         @Override
         public XWalkWebResourceResponse shouldInterceptLoadRequest(XWalkView view, XWalkWebResourceRequest request) {
             String url = request.getUrl().toString();
+            LOG.i("shouldInterceptLoadRequest url:" + url);
             // suppress favicon requests as we don't display them anywhere
 //            if (url.endsWith("/favicon.ico")) {
 //                return createXWalkWebResourceResponse("image/png", null, null);
@@ -1600,7 +1630,18 @@ public class PlayFragment extends BaseLazyFragment {
                 }
                 return null;
             }
-            LOG.i("shouldInterceptLoadRequest url:" + url);
+            //css与jpg等无效资源避免请求远程直接返回response
+            String uselessmMimeType = null;
+            if (url.contains(".css")) {
+                uselessmMimeType = "text/css";
+            } else if (url.contains(".jpg")) {
+                uselessmMimeType = "image/jpeg";
+            } else if (url.contains(".png")) {
+                uselessmMimeType = "image/png";
+            }
+            if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
+                return createXWalkWebResourceResponse(uselessmMimeType, "UTF-8", null);
+            }
             boolean ad;
             if (!loadedUrls.containsKey(url)) {
                 ad = AdBlocker.isAd(url);
@@ -1617,6 +1658,7 @@ public class PlayFragment extends BaseLazyFragment {
                         for (String k : hds.keySet()) {
                             if (k.equalsIgnoreCase("user-agent")
                                     || k.equalsIgnoreCase("referer")
+                                    || k.equalsIgnoreCase("accept")
                                     || k.equalsIgnoreCase("origin")) {
                                 webHeaders.put(k, hds.get(k));
                             }
