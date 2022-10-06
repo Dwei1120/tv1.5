@@ -111,7 +111,8 @@ public class DefaultConfig {
     //private static final Pattern snifferMatch = Pattern.compile("http((?!http).)*?default\\.365yg\\.com/.*|http((?!http).){26,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)\\?.*|http((?!http).){26,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg)|http((?!http).){26,}?/m3u8\\?pt=m3u8.*|http((?!http).)*?default\\.ixigua\\.com/.*|http((?!http).)*?cdn-tos[^\\?]*|http((?!http).)*?/obj/tos[^\\?]*|http.*?/player/m3u8play\\.php\\?url=.*|http.*?/player/.*?[pP]lay\\.php\\?url=.*|http.*?/playlist/m3u8/\\?vid=.*|http.*?\\.php\\?type=m3u8&.*|http.*?/download.aspx\\?.*|http.*?/api/up_api.php\\?.*|https.*?\\.66yk\\.cn.*|http((?!http).)*?netease\\.com/file/.*");
     //private static final Pattern snifferMatch = Pattern.compile("http((?!http).)*?default\\.365yg\\.com/.*|http((?!http).){26,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)\\?.*|http((?!http).){26,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)|http((?!http).){26,}?/m3u8\\?pt=m3u8.*|http((?!http).)*?huoshan\\.com/.*|http((?!http).)*?douyin\\.com/.*|http((?!http).)*?default\\.ixigua\\.com/.*|http((?!http).)*?cdn-tos[^\\?]*|http((?!http).)*?/obj/tos[^\\?]*|http.*?/player/m3u8play\\.php\\?url=.*|http.*?/player/.*?[pP]lay\\.php\\?url=.*|http.*?/playlist/m3u8/\\?vid=.*|http.*?\\.php\\?type=m3u8&.*|http.*?/download.aspx\\?.*|http.*?/api/up_api.php\\?.*|https.*?\\.66yk\\.cn.*|http((?!http).)*?netease\\.com/file/.*");
     private static final Pattern snifferMatch = Pattern.compile("http((?!http).)*?default\\.365yg\\.com/.*|http((?!http).){20,}?/m3u8\\?pt=m3u8.*|http((?!http).)*?huoshan\\.com/.*|http((?!http).)*?douyin\\.com/.*|http((?!http).)*?default\\.ixigua\\.com/.*|http((?!http).)*?/video/tos[^\\?]*|http((?!http).)*?dycdn-tos\\.pstatp[^\\?]*|http.*?/play.{0,3}\\?[^url]{2,8}=.*|http.*?/player/m3u8play\\.php\\?url=.*|http.*?/player/.*?[pP]lay\\.php\\?url=.*|http.*?/playlist/m3u8/\\?vid=.*|http.*?\\.php\\?type=m3u8&.*|http.*?/download.aspx\\?.*|http.*?/api/up_api.php\\?.*|https.*?\\.66yk\\.cn.*|http((?!http).)*?netease\\.com/file/.*");
-    private static final Pattern normalSnifferMatch = Pattern.compile("http((?!http).){20,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)\\?.*|http((?!http).){20,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)");
+    //private static final Pattern normalSnifferMatch = Pattern.compile("http((?!http).){20,}?\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)\\?.*|http((?!http).){20,}\\.(m3u8|mp4|flv|avi|mkv|rm|wmv|mpg|mov|3gp|asf|rmvb|mpeg|mpe|ts|vob|m4a|mp3|wma)");
+    private static final String[] videoSubfix = {"m3u8","mp4","flv","avi","mkv","rm","wmv","mpg","mov","3gp","asf","rmvb","mpeg","mpe","ts","vob","m4a","mp3","wma"};
     
     public static boolean isVideoFormat(String url) {
         //if (url.contains("=http") || url.contains(".html")) {
@@ -120,10 +121,13 @@ public class DefaultConfig {
             return false;
         }
         Uri uri = Uri.parse(url);
-        if (uri.getPath().endsWith(".js") || uri.getPath().endsWith(".css") || uri.getPath().endsWith(".html")) {
+        //if (uri.getPath().endsWith(".js") || uri.getPath().endsWith(".css") || uri.getPath().endsWith(".html")) {
+        String path = uri.getPath();
+        if (path == null || path.isEmpty()) {
             return false;
         }
-        if (uri.getQuery().startsWith("http")) {
+        //if (uri.getQuery().startsWith("http")) {
+        if (path.endsWith(".js") || path.endsWith(".css") || path.endsWith(".html")) {
         return false;
         }
         if (normalSnifferMatch.matcher(url).find()) {
@@ -132,11 +136,19 @@ public class DefaultConfig {
             //}
             return true;
         }
-        if (snifferMatch.matcher(url).find()) {
+        String query = uri.getQuery();
+        if (query != null && query.startsWith("http")) {
+            return false;
+        }
+        for(String oneSubfix : videoSubfix) {
+            if (path.endsWith("." + oneSubfix)) {
+                return true;
+            }
+        //if (snifferMatch.matcher(url).find()) {
             //if (url.contains("cdn-tos") && (url.contains(".js") || url.contains(".css"))) {
             //    return false;
             //}
-            return true;
+            //return true;
         }
         return false;
     }
