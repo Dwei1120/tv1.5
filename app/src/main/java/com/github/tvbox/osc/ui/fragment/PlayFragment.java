@@ -1495,6 +1495,8 @@ public class PlayFragment extends BaseLazyFragment {
                 uselessmMimeType = "image/jpeg";
             } else if (url.contains(".png")) {
                 uselessmMimeType = "image/png";
+            } else if (url.contains(".gif")) {
+                uselessmMimeType = "image/gif";
             }
             if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
                 return new WebResourceResponse(uselessmMimeType, "UTF-8", null);
@@ -1638,6 +1640,8 @@ public class PlayFragment extends BaseLazyFragment {
                 uselessmMimeType = "image/jpeg";
             } else if (url.contains(".png")) {
                 uselessmMimeType = "image/png";
+            } else if (url.contains(".gif")) {
+                uselessmMimeType = "image/gif";
             }
             if (uselessmMimeType != null && !uselessmMimeType.isEmpty()) {
                 return createXWalkWebResourceResponse(uselessmMimeType, "UTF-8", null);
