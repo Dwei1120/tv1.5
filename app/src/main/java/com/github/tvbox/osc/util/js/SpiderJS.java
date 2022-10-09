@@ -119,8 +119,8 @@ public class SpiderJS extends Spider {
     @Override
     public String playerContent(String flag, String id, List<String> vipFlags) {
         try {
-            JSObject obj = jsThread.post((ctx, globalThis) -> {
-                JSObject o = ctx.createNewJSObject();
+            JSArray array = jsThread.post((ctx, globalThis) -> {
+                JSArray arr = ctx.createNewJSArray();
                 if (vipFlags != null) {
                     for (int i = 0; i < vipFlags.size(); i++) {
                         arr.set(vipFlags.get(i), i);
