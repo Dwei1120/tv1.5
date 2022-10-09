@@ -37,6 +37,7 @@ import com.github.tvbox.osc.ui.tv.widget.SearchKeyboard;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.SearchHelper;
+import com.github.tvbox.osc.util.js.JSEngine;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -180,6 +181,7 @@ public class SearchActivity extends BaseActivity {
                     try {
                         if (searchExecutorService != null) {
                             pauseRunnable = searchExecutorService.shutdownNow();
+                            JSEngine.getInstance().stopAll();
                             searchExecutorService = null;
                         }
                     } catch (Throwable th) {
@@ -419,6 +421,7 @@ public class SearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
+                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
@@ -497,6 +500,7 @@ public class SearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
+                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
