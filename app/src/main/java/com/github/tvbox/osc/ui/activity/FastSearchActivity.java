@@ -2,10 +2,7 @@ package com.github.tvbox.osc.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,27 +20,19 @@ import com.github.tvbox.osc.bean.Movie;
 import com.github.tvbox.osc.bean.SourceBean;
 import com.github.tvbox.osc.event.RefreshEvent;
 import com.github.tvbox.osc.event.ServerEvent;
-import com.github.tvbox.osc.server.ControlManager;
 import com.github.tvbox.osc.ui.adapter.FastListAdapter;
 import com.github.tvbox.osc.ui.adapter.FastSearchAdapter;
-//import com.github.tvbox.osc.ui.adapter.SearchAdapter;
 import com.github.tvbox.osc.ui.adapter.SearchWordAdapter;
-import com.github.tvbox.osc.ui.dialog.RemoteDialog;
-import com.github.tvbox.osc.ui.tv.QRCodeGen;
-import com.github.tvbox.osc.ui.tv.widget.SearchKeyboard;
 import com.github.tvbox.osc.util.FastClickCheckUtil;
-import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.SearchHelper;
+import com.github.tvbox.osc.util.js.JSEngine;
 import com.github.tvbox.osc.viewmodel.SourceViewModel;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
 import com.lzy.okgo.model.Response;
-import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7GridLayoutManager;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -87,7 +76,7 @@ public class FastSearchActivity extends BaseActivity {
     private HashMap<String, String> spNames;
     private boolean isFilterMode = false;
     private String searchFilterKey = "";    // 过滤的key
-    private HashMap<String, ArrayList<Movie.Video> > resultVods; // 搜索结果
+    private HashMap<String, ArrayList<Movie.Video>> resultVods; // 搜索结果
     private List<String> quickSearchWord = new ArrayList<>();
     private HashMap<String, SourceBean> mCheckSources = null;
 
@@ -119,7 +108,7 @@ public class FastSearchActivity extends BaseActivity {
     @Override
     protected void init() {
         spNames = new HashMap<String, String>();
-        resultVods = new HashMap<String, ArrayList<Movie.Video> >();
+        resultVods = new HashMap<String, ArrayList<Movie.Video>>();
         initView();
         initViewModel();
         initData();
@@ -204,6 +193,7 @@ public class FastSearchActivity extends BaseActivity {
                     try {
                         if (searchExecutorService != null) {
                             pauseRunnable = searchExecutorService.shutdownNow();
+                            JSEngine.getInstance().stopAll();
                             searchExecutorService = null;
                         }
                     } catch (Throwable th) {
@@ -230,6 +220,7 @@ public class FastSearchActivity extends BaseActivity {
                     try {
                         if (searchExecutorService != null) {
                             pauseRunnable = searchExecutorService.shutdownNow();
+                            JSEngine.getInstance().stopAll();
                             searchExecutorService = null;
                         }
                     } catch (Throwable th) {
@@ -346,8 +337,7 @@ public class FastSearchActivity extends BaseActivity {
             } catch (Exception e) {
                 searchData(null);
             }
-        }
-        else if(event.type == RefreshEvent.TYPE_QUICK_SEARCH_WORD){
+        }else if(event.type == RefreshEvent.TYPE_QUICK_SEARCH_WORD){
             if (event.obj != null) {
                 List<String> data = (List<String>) event.obj;
                 searchWordAdapter.setNewData(data);
@@ -388,6 +378,7 @@ public class FastSearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
+                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
@@ -512,6 +503,7 @@ public class FastSearchActivity extends BaseActivity {
         try {
             if (searchExecutorService != null) {
                 searchExecutorService.shutdownNow();
+                JSEngine.getInstance().stopAll();
                 searchExecutorService = null;
             }
         } catch (Throwable th) {
