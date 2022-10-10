@@ -30,8 +30,9 @@ public class VideoParseRuler {
             boolean isVideo = DefaultConfig.isVideoFormat(url);
             if (!HOSTS_RULE.isEmpty() && !isVideo && webUrl != null) {
                 Uri uri = Uri.parse(webUrl);
-                isVideo = checkVideoForOneHostRules(uri.getHost(), url);
-                if (!isVideo) {
+                if(getHostRules(uri.getHost()) != null){
+                    isVideo = checkVideoForOneHostRules(uri.getHost(), url);
+                }else {
                     isVideo = checkVideoForOneHostRules("*", url);
                 }
             }
