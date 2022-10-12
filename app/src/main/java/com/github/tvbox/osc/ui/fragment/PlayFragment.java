@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -769,20 +770,23 @@ public class PlayFragment extends BaseLazyFragment {
     private SourceBean sourceBean;
 
     private void playNext(boolean isProgress) {
-        boolean hasNext = true;
+        boolean hasNext;
         if (mVodInfo == null || mVodInfo.seriesMap.get(mVodInfo.playFlag) == null) {
             hasNext = false;
         } else {
             hasNext = mVodInfo.playIndex + 1 < mVodInfo.seriesMap.get(mVodInfo.playFlag).size();
         }
         if (!hasNext) {
-            if(isProgress && mVodInfo!=null){
+/*            if(isProgress && mVodInfo!=null){
                 mVodInfo.playIndex=0;
                 Toast.makeText(requireContext(), "已经最后一集！即将列表循环播放", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(requireContext(), "已经是最后一集！", Toast.LENGTH_SHORT).show();
                 return;
             }
+*/
+            Toast.makeText(requireContext(), "已经是最后一集！", Toast.LENGTH_SHORT).show();
+                return;
         }else {
             mVodInfo.playIndex++;
         }
@@ -850,7 +854,7 @@ public class PlayFragment extends BaseLazyFragment {
         //重新播放清除现有进度
         if (reset) {
             CacheManager.delete(MD5.string2MD5(progressKey), 0);
-            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), "");
+            CacheManager.delete(MD5.string2MD5(subtitleCacheKey), 0);
         }
         if (Thunder.play(vs.url, new Thunder.ThunderCallback() {
             @Override
@@ -1197,7 +1201,7 @@ public class PlayFragment extends BaseLazyFragment {
                 XWalkUtils.tryUseXWalk(mContext, new XWalkUtils.XWalkState() {
                     @Override
                     public void success() {
-                        initWebView(false);
+                        initWebView(!sourceBean.getClickSelector().isEmpty());
                         loadUrl(url);
                     }
 
@@ -1368,6 +1372,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void configWebViewSys(WebView webView) {
         if (webView == null) {
             return;
@@ -1463,8 +1468,18 @@ public class PlayFragment extends BaseLazyFragment {
         public void onPageFinished(WebView view, String url) {
             super.onPageFinished(view,url);
             String click=sourceBean.getClickSelector();
-            if(!click.isEmpty() && url.contains(click.split(";")[0])){
-                mSysWebView.loadUrl("javascript:$(\""+ click.split(";")[1]+"\").click();");
+            LOG.i("onPageFinished url:" + url);
+
+            if(!click.isEmpty()){
+                String selector;
+                if(click.contains(";")){
+                    if(!url.contains(click.split(";")[0]))return;
+                    selector=click.split(";")[1];
+                }else {
+                    selector=click.trim();
+                }
+                String js="$(\""+ selector+"\").click();";
+                mSysWebView.loadUrl("javascript:"+js);
             }
         }
 
@@ -1567,6 +1582,7 @@ public class PlayFragment extends BaseLazyFragment {
         }
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     private void configWebViewX5(XWalkView webView) {
         if (webView == null) {
             return;
@@ -1654,8 +1670,11 @@ public class PlayFragment extends BaseLazyFragment {
         public void onLoadFinished(XWalkView view, String url) {
             super.onLoadFinished(view, url);
             String click=sourceBean.getClickSelector();
+            LOG.i("onLoadFinished url:" + url);
             if(!click.isEmpty() && url.contains(click.split(";")[0])){
-                mXwalkWebView.loadUrl("javascript:$(\""+ click.split(";")[1]+"\").click();");
+                String js="$(\""+ click.split(";")[1]+"\").click();";
+                LOG.i(js);
+                mXwalkWebView.loadUrl("javascript:"+js);
             }
         }
 
