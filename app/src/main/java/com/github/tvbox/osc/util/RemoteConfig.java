@@ -1,6 +1,6 @@
 package com.github.tvbox.osc.util;
 
-import android.content.Context;
+//import android.content.Context;
 import android.os.Bundle;
 
 import com.github.other.xunfei.WebIATWS;
@@ -24,31 +24,7 @@ public class RemoteConfig {
     private static String remoteUrl = "";
     private static JsonObject remoteJsonObject;
     private static boolean isRemoteConfigOk;
-    private static Context mContext;
 
-    public static void Init(Context mContext){
-        RemoteConfig.mContext = mContext;
-        if (ToolUtils.isApkInDebug(mContext)){
-            remoteUrl = "http://a.mayishidai.cn:7080/tv/apk/remote.ini";
-        }else{
-            remoteUrl = "https://mayishidai.cn/tv/apk/remote.ini";
-        }
-        LOG.e("RemoteConfig",
-                ToolUtils.isApkInDebug(mContext) ? "当前处于【调试】模式":"当前处于【正式】模式",
-                "远程配置地址", remoteUrl);
-        isRemoteConfigOk = false;
-        OkGo.<String>get(remoteUrl).execute(new AbsCallback<String>() {
-            @Override
-            public String convertResponse(okhttp3.Response response) throws Throwable {
-                return response.body().string();
-            }
-            @Override
-            public void onSuccess(Response<String> response) {
-                isRemoteConfigOk = true;
-                InitRemoteConfig(response.body());
-            }
-        });
-    }
     public static boolean IsOk(){
         return isRemoteConfigOk;
     }
