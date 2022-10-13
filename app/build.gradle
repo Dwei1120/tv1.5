@@ -111,7 +111,7 @@ android.applicationVariants.all {
             if (variant.buildType.name == 'debug'){
                 output.outputFileName = "DweiTV_${android.defaultConfig.versionName}_${date}_debug.apk"
             }else if (variant.buildType.name == 'release'){
-                output.outputFileName = "DweiTV_${date}.apk"
+                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}_${date}.apk"
             }
         }
 }
