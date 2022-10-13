@@ -14,7 +14,7 @@ public class BootCompleteReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         // TODO: This method is called when the BroadcastReceiver is receiving
         // an Intent broadcast.
-        Log.e("TVBox", "BootCompleteReceiver onReceive  1 ");
+        Log.e("DweiTV", "BootCompleteReceiver onReceive  1 ");
         LOG.e("BootCompleteReceiver", "onReceive", 1);
         if(Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())){
             LOG.e("BootCompleteReceiver", "onReceive", 2);
