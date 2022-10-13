@@ -17,4 +17,12 @@ public class LOG {
     public static void i(String msg) {
         Log.i(TAG, "" + msg);
     }
+    public static void printStackTrace(Exception ex){
+        e(ex);
+        ex.printStackTrace();
+    }
+    public static void printStackTrace(Throwable th){
+        e(th);
+        th.printStackTrace();
+    }
 }
