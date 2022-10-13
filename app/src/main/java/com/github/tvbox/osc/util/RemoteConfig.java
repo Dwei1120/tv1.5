@@ -19,7 +19,7 @@ import com.orhanobut.hawk.Hawk;
 /*
  * 远程文件配置
  */
-/*
+
 public class RemoteConfig {
     private static String remoteUrl = "";
     private static JsonObject remoteJsonObject;
@@ -153,7 +153,7 @@ public class RemoteConfig {
         // endregion 默认窗口预览
 
         // endregion 默认配置
-*/
+
 
         // region 语音搜索
         String voiceAppID="",voiceApiSecret="",voiceApiKey ="";
@@ -209,7 +209,7 @@ public class RemoteConfig {
             }
         }
         //endregion
-/*
+
         // region 默认更新地址
         if (GetValue(RemoteConfigName.UpdateData)!=null && GetValue(RemoteConfigName.UpdateData).getAsJsonObject() != null) {
             JsonObject updateData = GetValue(RemoteConfigName.UpdateData).getAsJsonObject();
@@ -251,4 +251,4 @@ public class RemoteConfig {
         return false;
     }
 }
-*/
+
