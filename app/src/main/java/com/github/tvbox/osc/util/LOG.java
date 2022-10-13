@@ -109,10 +109,10 @@ public class LOG {
             Log.e(TAG, msg);
         WriteFile(logType, msg);
     }
-    private static void WriteFile(int logType, String msg){
-        if (isSaveLog && file!=null)
-            FileUtils.appendFile(file, String.format("%s   %s\n", logType, msg));
-    }
+//    private static void WriteFile(int logType, String msg){
+//        if (isSaveLog && file!=null)
+//            FileUtils.appendFile(file, String.format("%s   %s\n", logType, msg));
+//    }
 }
 
 /*
