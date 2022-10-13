@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.github.other.xunfei.WebIATWS;
 import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.ui.activity.HomeActivity;
-import com.github.tvbox.osc.ui.dialog.UpdateDialog;
+//import com.github.tvbox.osc.ui.dialog.UpdateDialog;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
