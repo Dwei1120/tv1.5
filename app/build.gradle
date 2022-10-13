@@ -102,3 +102,16 @@ dependencies {
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
 }
+
+
+android.applicationVariants.all {
+    variant ->
+        variant.outputs.all { output ->
+            def date = new Date().format("yyyy年MM月dd日", TimeZone.getTimeZone("GMT+08"))
+            if (variant.buildType.name == 'debug'){
+                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}_${date}_debug.apk"
+            }else if (variant.buildType.name == 'release'){
+                output.outputFileName = "DweiTV_${date}.apk"
+            }
+        }
+}
