@@ -107,11 +107,11 @@ dependencies {
 android.applicationVariants.all {
     variant ->
         variant.outputs.all { output ->
-            def date = new Date().format("yyyy年MM月dd日", TimeZone.getTimeZone("GMT+08"))
+            def date = new Date().format("yyMMdd", TimeZone.getTimeZone("GMT+08"))
             if (variant.buildType.name == 'debug'){
-                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}_${date}_debug.apk"
+                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}.${date}_debug.apk"
             }else if (variant.buildType.name == 'release'){
-                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}_${date}.apk"
+                output.outputFileName = "DweiTV_${android.defaultConfig.versionName}.${date}.apk"
             }
         }
 }
