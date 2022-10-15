@@ -89,7 +89,7 @@ public class ApiConfig {
         try {
             if (AES.isJson(content)) return content;
             if(content.contains("\\*\\*")){
-                String[] data = json.split("\\*\\*");
+                String[] data = json.split("**");
                 content = new String(Base64.decode(data[1], Base64.DEFAULT));
             }
             if (content.startsWith("2423")) {
