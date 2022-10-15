@@ -62,4 +62,8 @@ rules规则调整
 修正图床bug
 修正嗅探偶发报错
 调整打包输出名
+兼容道长本地js(drpy)
+热搜词联想切换为爱奇艺
+js引擎-req方法识别Content-Type
+嗅探带上cookie播放
 
